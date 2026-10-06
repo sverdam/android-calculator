@@ -16,21 +16,19 @@ class MainActivity : AppCompatActivity() {
     lateinit var TVnum1: TextView
     lateinit var TVnum2: TextView
 
-
-    // 1) Aquí van las variables del video
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         TVnum1 = findViewById(R.id.num1)
         TVnum2 = findViewById(R.id.num2)
-        val btnClear: Button = findViewById(R.id.btnClear)
+        val btnClearAll: Button = findViewById(R.id.btnClearAll)
         val btnEqual: Button = findViewById(R.id.btnEqual)
+        val btnBackspace: Button = findViewById(R.id.btnBackspace)
+
         btnEqual.setOnClickListener {
-            if (oper == 0) {
-                TVnum2.setText("Select an operation")
-            } else if (TVnum2.text.toString() == "") {
-                TVnum2.setText("Enter a number")
+            if (TVnum2.text.toString() == "Error" || TVnum2.text.toString() == "" || oper == 0){
+                TVnum2.setText("")
             } else {
                 var number2: Double = TVnum2.text.toString().toDouble()
                 var ans: Double = 0.0
@@ -45,39 +43,52 @@ class MainActivity : AppCompatActivity() {
                         4 -> ans = number / number2
                     }
 
-                    TVnum2.setText(ans.toString())
+                    TVnum2.setText(ans.toInt().toString())
                     TVnum1.setText("")
                     oper = 0
                 }
             }
         }
-        btnClear.setOnClickListener {
+
+        btnClearAll.setOnClickListener {
             TVnum1.setText("")
             TVnum2.setText("")
             number = 0.0
             oper = 0
         }
+
+        btnBackspace.setOnClickListener {
+            var num2 = TVnum2.text.toString()
+            if (num2 == "" || num2 == "Error") {
+                TVnum2.setText("")
+            } else {
+                num2 = num2.dropLast(1)
+                if (num2 == "" || num2 == "0.0") {
+                    TVnum2.setText("")
+                } else {
+                    TVnum2.setText(num2)
+                }
+            }
+        }
     }
 
     fun pressDigit(view: View) {
         var num2: String = TVnum2.text.toString()
-
-        if (num2 == "Error" || num2 == "Enter a number" || num2 == "Select an operation") {
+        if (num2 == "Error") {
             num2 = ""
             TVnum2.setText("")
         }
-
         when (view.id) {
-            R.id.btn0 -> TVnum2.setText(num2 + 0)
-            R.id.btn1 -> TVnum2.setText(num2 + 1)
-            R.id.btn2 -> TVnum2.setText(num2 + 2)
-            R.id.btn3 -> TVnum2.setText(num2 + 3)
-            R.id.btn4 -> TVnum2.setText(num2 + 4)
-            R.id.btn5 -> TVnum2.setText(num2 + 5)
-            R.id.btn6 -> TVnum2.setText(num2 + 6)
-            R.id.btn7 -> TVnum2.setText(num2 + 7)
-            R.id.btn8 -> TVnum2.setText(num2 + 8)
-            R.id.btn9 -> TVnum2.setText(num2 + 9)
+            R.id.btn0 -> TVnum2.setText(num2 + "0")
+            R.id.btn1 -> TVnum2.setText(num2 + "1")
+            R.id.btn2 -> TVnum2.setText(num2 + "2")
+            R.id.btn3 -> TVnum2.setText(num2 + "3")
+            R.id.btn4 -> TVnum2.setText(num2 + "4")
+            R.id.btn5 -> TVnum2.setText(num2 + "5")
+            R.id.btn6 -> TVnum2.setText(num2 + "6")
+            R.id.btn7 -> TVnum2.setText(num2 + "7")
+            R.id.btn8 -> TVnum2.setText(num2 + "8")
+            R.id.btn9 -> TVnum2.setText(num2 + "9")
             R.id.btnDot -> {
                 if (num2 != "" && !num2.contains(".")) {
                     TVnum2.setText(num2 + ".")
@@ -85,14 +96,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
     fun clickOperation(view: View) {
-        if (TVnum2.text.toString() == "" ||
-            TVnum2.text.toString() == "Error" ||
-            TVnum2.text.toString() == "Enter a number" ||
-            TVnum2.text.toString() == "Select an operation") {
-
-            TVnum2.setText("Enter a number")
+        if (TVnum2.text.toString() == "" || TVnum2.text.toString() == "Error") {
+            TVnum2.setText("")
             return
         }
 
