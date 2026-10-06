@@ -42,8 +42,12 @@ class MainActivity : AppCompatActivity() {
                         3 -> ans = number * number2
                         4 -> ans = number / number2
                     }
+                    if (ans % 1.0 == 0.0){
+                        TVnum2.setText(ans.toInt().toString())
+                    } else {
+                        TVnum2.setText(ans.toString())
+                    }
 
-                    TVnum2.setText(ans.toInt().toString())
                     TVnum1.setText("")
                     oper = 0
                 }
